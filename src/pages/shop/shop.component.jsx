@@ -7,13 +7,13 @@ import {updateCollections} from '../../redux/shop/shop.actions';
 import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
 import CollectionPage from '../collection/collection.component';
 
-import {firestore, convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils';
+import {firestore, convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils.js';
 
 class ShopPage extends React.Component{
     unsubscribeFromSnapshot = null;
     
     componentDidMount() {
-        const { updateCollections } = this.props;
+        const updateCollections = this.props.updateCollections;
         const collectionRef = firestore.collection('collections');
     
         collectionRef.get().then((snapshot) => {
@@ -30,14 +30,13 @@ class ShopPage extends React.Component{
                 <Route exact path = {`${match.path}`} component = {CollectionsOverview}/>
                 <Route path = {`${match.path}/:collectionId`} component = {CollectionPage}/>
         </div>
-
-       ) 
+       );
     }
 }; 
 
 const mapDispatchToProps = dispatch =>({
-    UpdateCollections: collectionsMap =>
+    updateCollections: (collectionsMap) =>
         dispatch(updateCollections(collectionsMap))
-})
+});
 
 export default connect(null, mapDispatchToProps)(ShopPage);
